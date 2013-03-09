@@ -50,11 +50,11 @@ Business Secrets - Stephen Jennings-mg-I818saDg.mp4.info.json
 result = string.split(src, '\n')
 
 for line in result:
-    print line
+    #print line
     res = re.sub('(Бизнес-секреты)|(Business Secrets)|( - )|(\.json)|(\.mp4)|(\.info)|(\.)', r'', line)
-    print res
+    # print res
     res = string.split(res, '-')
     res = res[0]+".json"
 
-    print res
-    print ""
+    print 'mv -i "'+line+'" "'+res+'"'
+    #print ""
