@@ -5,9 +5,7 @@ python youtube-dl -x --audio-format mp3 --prefer-free-formats --get-filename -o 
 
 python youtube-dl -x --audio-format mp3 --prefer-free-formats -c -t --playlist-start 10 http://www.youtube.com/playlist?list=PL090634BB17919603
 
-
 python youtube-dl -x -c -t -w --playlist-start 22 -k --write-info-json http://www.youtube.com/playlist?list=PL090634BB17919603
-
 
 SeRd38qbZvc-Бизнес-секреты - Ника Белоцерковская.webm
 IdQrGkO6GM8-Бизнес-секреты - Евгений Чичваркин.webm

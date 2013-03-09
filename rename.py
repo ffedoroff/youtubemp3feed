@@ -1,54 +1,58 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-import string, re
+import string, re, glob, json
+from pprint import pprint
 
-src="""Business Secrets - Filip Engelbert-o1pS92AG8xQ.mp4.info.json
-Business Secrets - Guy Laliberte-KgonsWgYDTA.mp4.info.json
-Business Secrets - Richard Branson-5H7FCbMEG3o.mp4.info.json
-Business Secrets - Stephen Jennings-mg-I818saDg.mp4.info.json
-Бизнес-секреты - Александр Акопов-DlpkVo8L59I.flv.info.json
-Бизнес-секреты - Алексей Панферов-504IPjTXd34.mp4.info.json
-Бизнес-секреты - Алексей Репик-jpdYTSbPU_A.mp4.info.json
-Бизнес-секреты - Алла Вербер-Lsvwm-6wNVE.mp4.info.json
-Бизнес-секреты - Андреас Рай-5JvQuPx6oDI.mp4.info.json
-Бизнес-секреты - Андрей Даниленко-pBB3VY5c1-k.mp4.info.json
-Бизнес-секреты - Анна Знаменская-qtvp-DrTVn8.mp4.info.json
-Бизнес-секреты - Арам Мнацаканов-77KijruPOXA.mp4.info.json
-Бизнес-секреты - Арас Агаларов-ulzJcKjU6ps.mp4.info.json
-Бизнес-секреты - Артем Аветисян-s3BCNDe-2pM.mp4.info.json
-Бизнес-секреты - Артемий Лебедев-MKoNHZbERMQ.mp4.info.json
-Бизнес-секреты - Борис Йордан-_mBtu5JGCok.flv.info.json
-Бизнес-секреты - Вадим Лапин-ig1gb2OvXkA.mp4.info.json
-Бизнес-секреты - Вадим Финкельштейн-sP0XmK1dlsE.mp4.info.json
-Бизнес-секреты - Всеволод Страх-lKtoMEkzchA.mp4.info.json
-Бизнес-секреты - Дмитрий Маликов-dhdsa0L7gw4.mp4.info.json
-Бизнес-секреты - Дмитрий Потапенко-k1lpX6Xv8as.flv.info.json
-Бизнес-секреты - Евгений Каценельсон-1JFSWUIHGAs.mp4.info.json
-Бизнес-секреты - Евгений Чичваркин-IdQrGkO6GM8.mp4.info.json
-Бизнес-секреты - Елена Батурина-oipxvwjK8mE.mp4.info.json
-Бизнес-секреты - Игорь Лейтис-jxYVSBiHPwk.mp4.info.json
-Бизнес-секреты - Кирилл Андросов-UNxPixUG5Q4.mp4.info.json
-Бизнес-секреты - Леонид Огородников-M57ZyeDXjo4.mp4.info.json
-Бизнес-секреты - Леонид Шутов--VP7vghsoEU.mp4.info.json
-Бизнес-секреты - Максим Иванов-08ijcWUdeLU.mp4.info.json
-Бизнес-секреты - Максим Каширин-n-z9FnRXkXY.mp4.info.json
-Бизнес-секреты - Максим Ноготков-ZuEQe-pixY0.mp4.info.json
-Бизнес-секреты - Михаил Прохоров-JjOCjrebCwU.mp4.info.json
-Бизнес-секреты - Ника Белоцерковская-SeRd38qbZvc.mp4.info.json
-Бизнес-секреты - Николай Фоменко-GsCAgtODM2k.mp4.info.json
-Бизнес-секреты - Олег Бойко-R_nuPRekJ-g.mp4.info.json
-Бизнес-секреты - Олег Новиков-xXkQ5G823Ys.mp4.info.json
-Бизнес-секреты - Оливер Хьюз-5QAL0R1wgOk.mp4.info.json
-Бизнес-секреты - Ольга Слуцкер-VZLJs5ynLFQ.mp4.info.json
-Бизнес-секреты - Сергей Мавроди-dnmgnDqKL9c.mp4.info.json
-Бизнес-секреты - Сергей Матвиенко-l6kj7dqGN0Y.mp4.info.json
-Бизнес-секреты - Сергей Петров-A12y4HSQ7DE.mp4.info.json
-Бизнес-секреты - Сергей Полонский (1)-kj7BIqHYUj8.mp4.info.json
-Бизнес-секреты - Сергей Полонский (2)-1xTUkxNDYpE.mp4.info.json
-Бизнес-секреты - Федор Овчинников-cLtQHtS2W8k.mp4.info.json"""
+src="""001-Бизнес-секреты - Борис Йордан-_mBtu5JGCok.m4a
+002-Бизнес-секреты - Анна Знаменская-qtvp-DrTVn8.m4a
+003-Бизнес-секреты - Михаил Прохоров-JjOCjrebCwU.m4a
+004-Бизнес-секреты - Олег Бойко-R_nuPRekJ-g.m4a
+005-Бизнес-секреты - Николай Фоменко-GsCAgtODM2k.m4a
+006-Бизнес-секреты - Артемий Лебедев-MKoNHZbERMQ.m4a
+007-Бизнес-секреты - Оливер Хьюз-5QAL0R1wgOk.m4a
+008-Business Secrets - Richard Branson-5H7FCbMEG3o.m4a
+009-Бизнес-секреты - Сергей Мавроди-dnmgnDqKL9c.m4a
+010-Бизнес-секреты - Ника Белоцерковская-SeRd38qbZvc.m4a
+SeRd38qbZvc-Бизнес-секреты - Ника Белоцерковская.webm
+IdQrGkO6GM8-Бизнес-секреты - Евгений Чичваркин.webm
+l6kj7dqGN0Y-Бизнес-секреты - Сергей Матвиенко.webm
+1JFSWUIHGAs-Бизнес-секреты - Евгений Каценельсон.webm
+A12y4HSQ7DE-Бизнес-секреты - Сергей Петров.webm
+ulzJcKjU6ps-Бизнес-секреты - Арас Агаларов.webm
+xXkQ5G823Ys-Бизнес-секреты - Олег Новиков.webm
+oipxvwjK8mE-Бизнес-секреты - Елена Батурина.webm
+dhdsa0L7gw4-Бизнес-секреты - Дмитрий Маликов.mp4
+504IPjTXd34-Бизнес-секреты - Алексей Панферов.webm
+ZuEQe-pixY0-Бизнес-секреты - Максим Ноготков.webm
+REG3VadrGto-Бизнес-секреты - Майкл Калви.webm
+cLtQHtS2W8k-Бизнес-секреты - Федор Овчинников.webm
+jxYVSBiHPwk-Бизнес-секреты - Игорь Лейтис.webm
+-VP7vghsoEU-Бизнес-секреты - Леонид Шутов.webm
+sP0XmK1dlsE-Бизнес-секреты - Вадим Финкельштейн.webm
+o1pS92AG8xQ-Business Secrets - Filip Engelbert.webm
+mg-I818saDg-Business Secrets - Stephen Jennings.webm
+77KijruPOXA-Бизнес-секреты - Арам Мнацаканов.webm
+5JvQuPx6oDI-Бизнес-секреты - Андреас Рай.webm
+s3BCNDe-2pM-Бизнес-секреты - Артем Аветисян.webm
+M57ZyeDXjo4-Бизнес-секреты - Леонид Огородников.webm
+kj7BIqHYUj8-Бизнес-секреты - Сергей Полонский (1).webm
+KgonsWgYDTA-Business Secrets - Guy Laliberte.webm
+1xTUkxNDYpE-Бизнес-секреты - Сергей Полонский (2).webm
+UNxPixUG5Q4-Бизнес-секреты - Кирилл Андросов.webm
+08ijcWUdeLU-Бизнес-секреты - Максим Иванов.webm
+ig1gb2OvXkA-Бизнес-секреты - Вадим Лапин.webm
+VZLJs5ynLFQ-Бизнес-секреты - Ольга Слуцкер.webm
+n-z9FnRXkXY-Бизнес-секреты - Максим Каширин.webm
+jpdYTSbPU_A-Бизнес-секреты - Алексей Репик.mp4
+Lsvwm-6wNVE-Бизнес-секреты - Алла Вербер.webm
+pBB3VY5c1-k-Бизнес-секреты - Андрей Даниленко.webm
+lKtoMEkzchA-Бизнес-секреты - Всеволод Страх.webm
+k1lpX6Xv8as-Бизнес-секреты - Дмитрий Потапенко.webm
+DlpkVo8L59I-Бизнес-секреты - Александр Акопов.webm"""
 
-result = string.split(src, '\n')
+src = string.split(src, '\n')
 
+"""
 for line in result:
     #print line
     res = re.sub('(Бизнес-секреты)|(Business Secrets)|( - )|(\.json)|(\.mp4)|(\.info)|(\.)', r'', line)
@@ -58,3 +62,22 @@ for line in result:
 
     print 'mv -i "'+line+'" "'+res+'"'
     #print ""
+
+"""
+
+files = glob.glob("json/Бизнес-секреты/*.json")
+
+for file in files:
+	json_data=open(file)
+	data = json.load(json_data)
+	#pprint(data)
+	#print data["id"]
+	lineNumber = 1
+	for line in src:
+		if lineNumber > 9: continue
+		if data["id"] in line.decode("utf-8"):
+			#print str(lineNumber)+" "+line
+			print ('mv -i "'+file+'" "0'+str(lineNumber)+" "+file+'"').replace("json/Бизнес-секреты/","")
+		lineNumber += 1
+
+	json_data.close()
