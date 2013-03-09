@@ -12,7 +12,6 @@ src="""001-Бизнес-секреты - Борис Йордан-_mBtu5JGCok.m4a
 007-Бизнес-секреты - Оливер Хьюз-5QAL0R1wgOk.m4a
 008-Business Secrets - Richard Branson-5H7FCbMEG3o.m4a
 009-Бизнес-секреты - Сергей Мавроди-dnmgnDqKL9c.m4a
-010-Бизнес-секреты - Ника Белоцерковская-SeRd38qbZvc.m4a
 SeRd38qbZvc-Бизнес-секреты - Ника Белоцерковская.webm
 IdQrGkO6GM8-Бизнес-секреты - Евгений Чичваркин.webm
 l6kj7dqGN0Y-Бизнес-секреты - Сергей Матвиенко.webm
@@ -70,14 +69,16 @@ files = glob.glob("json/Бизнес-секреты/*.json")
 for file in files:
 	json_data=open(file)
 	data = json.load(json_data)
+	json_data.close()
 	#pprint(data)
 	#print data["id"]
 	lineNumber = 1
 	for line in src:
-		if lineNumber > 9: continue
+		#if lineNumber > 1: continue
 		if data["id"] in line.decode("utf-8"):
-			#print str(lineNumber)+" "+line
-			print ('mv -i "'+file+'" "0'+str(lineNumber)+" "+file+'"').replace("json/Бизнес-секреты/","")
+			print str(lineNumber)+" "+data["id"]
+			data["number_in_playlist"] = lineNumber
+			json.dump(data, open(file, "w"), indent=4, separators=(',', ': '), sort_keys=True)
+			#print ('mv -i "'+file+'" "0'+str(lineNumber)+" "+file+'"').replace("json/Бизнес-секреты/","")
 		lineNumber += 1
-
-	json_data.close()
+	
