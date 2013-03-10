@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-import string, re, glob, json
+import string, re, glob, json, sys
 from pprint import pprint
 
 src="""001-Бизнес-секреты - Борис Йордан-_mBtu5JGCok.m4a
@@ -52,14 +52,14 @@ DlpkVo8L59I-Бизнес-секреты - Александр Акопов.webm""
 src = string.split(src, '\n')
 
 """
-for line in result:
+for line in src:
     #print line
     res = re.sub('(Бизнес-секреты)|(Business Secrets)|( - )|(\.json)|(\.mp4)|(\.info)|(\.)', r'', line)
     # print res
     res = string.split(res, '-')
     res = res[0]+".json"
 
-    print 'mv -i "'+line+'" "'+res+'"'
+    #print 'mv -i "'+line+'" "'+res+'"'
     #print ""
 
 """
@@ -70,15 +70,27 @@ for file in files:
 	json_data=open(file)
 	data = json.load(json_data)
 	json_data.close()
+	#print data["title"]
+	short_title = re.sub(u'(Бизнес-секреты:\ )|(Business Secrets:\ )', r'', data["stitle"])
+	data["short_title"] = short_title
+	res = json.dumps(data, ensure_ascii=False, indent=4, separators=(',', ': '), encoding="utf-8", sort_keys=True)
+	res = res.replace('\\n','\\n\n')
+	#print res
+	
+	filename = str(data["number_in_playlist"]).zfill(3)+" "+short_title
+	f = open(u'json/Бизнес-секреты/'+filename, 'w')
+	f.write(res.encode("utf-8"))
+	f.close()
+	print filename
+	#sys.exit(0)
 	#pprint(data)
 	#print data["id"]
-	lineNumber = 1
-	for line in src:
+	#lineNumber = 1
+	#for line in src:
 		#if lineNumber > 1: continue
-		if data["id"] in line.decode("utf-8"):
-			print str(lineNumber)+" "+data["id"]
-			data["number_in_playlist"] = lineNumber
-			json.dump(data, open(file, "w"), indent=4, separators=(',', ': '), sort_keys=True)
+		#if data["id"] in line.decode("utf-8"):
+			#print str(lineNumber)+" "+data["id"]
+			#print data["title"]
+			#json.dump(data, open(file, "w"), indent=4, separators=(',', ': '), sort_keys=True)
 			#print ('mv -i "'+file+'" "0'+str(lineNumber)+" "+file+'"').replace("json/Бизнес-секреты/","")
-		lineNumber += 1
-	
+		#lineNumber += 1
