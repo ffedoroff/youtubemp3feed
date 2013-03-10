@@ -3,9 +3,9 @@
 
 import json
 from pprint import pprint
-json_data=open('json/Бизнес-секреты/Filip Engelbert.json')
-
-data = json.load(json_data)
-#pprint(data)
-print data["id"]
-json_data.close()
+files = sorted(glob.glob("json/Бизнес-секреты/*.json"))
+for file in files:
+	print file
+	json_data=open(file)
+	data = json.load(json_data)
+	json_data.close()
