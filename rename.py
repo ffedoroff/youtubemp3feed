@@ -61,6 +61,8 @@ for file in files:
 	json_data.close()
 
 	#change data object here
+	data["number_in_playlist"] = str(data["number_in_playlist"])
+	data["raw_audio"] = "Бизнес-секреты/"+data["number_in_playlist"].zfill(3)+data["short_title"]+"m4a"
 
 	res = json.dumps(data, ensure_ascii=False, indent=4, separators=(',', ': '), encoding="utf-8", sort_keys=True)
 	f = open(file, 'w')
