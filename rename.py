@@ -67,6 +67,7 @@ for line in src:
 files = glob.glob("json/Бизнес-секреты/*.json")
 
 for file in files:
+	#print file
 	json_data=open(file)
 	data = json.load(json_data)
 	json_data.close()
@@ -74,10 +75,10 @@ for file in files:
 	short_title = re.sub(u'(Бизнес-секреты:\ )|(Business Secrets:\ )', r'', data["stitle"])
 	data["short_title"] = short_title
 	res = json.dumps(data, ensure_ascii=False, indent=4, separators=(',', ': '), encoding="utf-8", sort_keys=True)
-	res = res.replace('\\n','\\n\n')
+	#res = res.replace('\\n','\\n\n')
 	#print res
 	
-	filename = str(data["number_in_playlist"]).zfill(3)+" "+short_title
+	filename = str(data["number_in_playlist"]).zfill(3)+" "+short_title+".json"
 	f = open(u'json/Бизнес-секреты/'+filename, 'w')
 	f.write(res.encode("utf-8"))
 	f.close()
