@@ -75,7 +75,7 @@ for file in files:
 	    res += '%s: "%s"\n'% (item, value)
 	res += "---\n\n"
 
-	res +=	"{% img left "+data["thumbnail"]+" Place Kitten #2 %}\n"
+	res +=	"{% img left "+data["thumbnail"]+" "+data["title"]+" %}\n"
 
 	res += data["description"].replace('\n','  \n')
 
